@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { Container, Content, Header } from "./styles";
 import { FiArrowLeft } from "react-icons/fi";
 import { Link, useHistory, useLocation } from "react-router-dom";
@@ -17,11 +17,17 @@ export default function EditProduct() {
   const location = useLocation();
   const formRef = useRef(null);
   const [thumbnail, setThumbnail] = useState("");
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadProduct();
+  }, []);
+  useLayoutEffect(() => {
     setThumbnail(product.thumbnail);
-  }, [loadProduct()]);
+    setName(product.name);
+    setPrice(product.price);
+  }, [product]);
 
   async function editNewProduct(data) {
     try {
@@ -36,7 +42,7 @@ export default function EditProduct() {
         abortEarly: false,
       });
 
-      const product_id = location.state.product_id;
+      const product_id = location.state.productid;
       editProduct({
         productId: product_id,
         file: data.file,
@@ -73,8 +79,8 @@ export default function EditProduct() {
           {/* <ProfileDropZone product={thumbnail} onFileUploaded={setThumbnail} /> */}
           <ImageInput name="file" product={product.thumbnail_url} />
           <br />
-          <Input name="name" placeholder="Name" product={product.name} />
-          <Input name="price" placeholder="Price" product={product.price} />
+          <Input name="name" placeholder="Name" product={name} />
+          <Input name="price" placeholder="Price" product={price} />
 
           <Button type="submit" className="btn">
             Register

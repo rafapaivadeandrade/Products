@@ -6,7 +6,7 @@ const ProductContext = createContext({});
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([""]);
   const [product, setProduct] = useState([]);
-
+  const [productSelected, setProductSelected] = useState(false);
   async function createProduct({ file, name, price }) {
     const user_id = localStorage.getItem("user_id");
     const datas = new FormData();
@@ -24,14 +24,11 @@ export const ProductProvider = ({ children }) => {
       return false;
     }
   }
-  //   const loadProducts = useCallback(async () => {
-  //     const user_id = localStorage.getItem("user_id");
-  //     const response = await api.get("/products", {
-  //       headers: { user_id },
-  //     });
-  //     setProducts(response.data);
-  //     return response.data;
-  //   }, [products]);
+  const loadProduct = useCallback(async () => {
+    const product_id = localStorage.getItem("product_id");
+    const response = await api.get(`/product/${product_id}`);
+    setProduct(response.data);
+  }, [product]);
 
   async function loadProducts() {
     const user_id = localStorage.getItem("user_id");
@@ -39,13 +36,8 @@ export const ProductProvider = ({ children }) => {
       headers: { user_id },
     });
     setProducts(response.data);
-    // return response.data;
   }
-  async function loadProduct() {
-    const product_id = localStorage.getItem("product_id");
-    const response = await api.get(`/product/${product_id}`);
-    setProduct(response.data);
-  }
+
   async function deleteProduct(id) {
     await api.delete(`/product/${id}`);
 

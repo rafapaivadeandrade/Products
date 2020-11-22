@@ -12,6 +12,11 @@ const Products = () => {
     loadProducts();
   }, [products]);
 
+  function editProduct(id) {
+    localStorage.setItem("product_id", id);
+    history.push("/product/edit", { productid: id });
+  }
+
   return (
     <PageProducts>
       <Header>
@@ -51,12 +56,7 @@ const Products = () => {
             <button type="button" onClick={() => deleteProduct(product.id)}>
               <FiTrash2 size={20} color="#a8a8b3" />
             </button>
-            <button
-              type="button"
-              onClick={() =>
-                history.push("/product/edit", { product_id: product.id })
-              }
-            >
+            <button type="button" onClick={() => editProduct(product.id)}>
               <FiEdit size={20} color="#a8a8b3" />
             </button>
           </li>
